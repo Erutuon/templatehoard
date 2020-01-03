@@ -1,0 +1,452 @@
+&lit
++obj
++posto
++preo
+1
+abbreviated
+abbreviation of
+abstract noun of
+accusative of
+accusative plural of
+accusative singular of
+acronym of
+active participle of
+adj form of
+adverbialbox
+af
+afex
+affix
+affixusex
+agent noun of
+alter
+alternative case form of
+alternative form of
+alternative plural of
+alternative reconstruction of
+alternative spelling of
+alternative typography of
+anagrams
+ant
+antonyms
+apdx-l
+aphetic form of
+apocopic form of
+Arab-def
+archaic form of
+archaic spelling of
+aspirate mutation of
+attention
+attributive form of
+audio
+audio-IPA
+audio-pron
+augmentative of
+back-form
+back-formation
+beer
+bf
+bgc-term
+blend
+bor
+borrowed
+borrowed cat
+broad form of
+cal
+calque
+calque cat
+cardinalbox
+cat
+categorize
+catlangname
+causative of
+charactercat
+circumfix
+circumfix cat
+circumfixsee
+citation
+citations
+clipping
+clipping of
+cln
+cog
+coglist
+cognate
+coinage cat
+col
+col-u
+col1
+col1-u
+col2
+col2-u
+col3
+col3-u
+col4
+col4-u
+col5
+col5-u
+columns
+com
+combining form of
+comma list
+comparative of
+compass
+compound
+con
+confix
+construed with
+contraction of
+coordinate terms
+cuneiform
+dated form of
+dated spelling of
+dative of
+dative plural of
+dative singular of
+definite plural of
+definite singular of
+deliberate misspelling of
+der
+der2
+der3
+der4
+derived
+derived cat
+dervcat
+desc
+descendant
+descendants tree
+desctree
+diminutive of
+diminutive plural of
+doc:letter:examples:add
+doc:letter:usage
+dual of
+eclipsis of
+eggcorn of
+elative of
+elements
+ellipsis of
+elongated form of
+endearing form of
+enum
+equative of
+etyl
+etymtree
+etystub
+euphemistic form of
+euphemistic spelling of
+eye dialect of
+family cat
+female equivalent of
+feminine of
+feminine plural of
+feminine plural past participle of
+feminine singular of
+feminine singular past participle of
+form of
+former name of
+frequentative of
+future participle of
+genitive of
+genitive plural of
+genitive singular of
+gerund of
+given name
+Han compound
+hard mutation of
+harmonic variant of
+he-given name
+head
+headtempboiler
+headtempboiler:letter
+headtempboiler:number
+headtempboiler:suffix
+headtempdocboiler
+headtempdocboiler:letter
+headtempdocboiler:number
+headtempdocboiler:suffix
+historical given name
+history
+hmp
+holonyms
+homophone
+homophones
+honorific alternative case form of
+hot word
+hy-traditional
+hyper
+hypernyms
+hyph
+hyphenation
+hypo
+hyponyms
+imperative of
+imperfective form of
+imperfectives
+impf
+indefinite plural of
+indtr
+infix
+infix cat
+inflection of
+informal form of
+informal spelling of
+inh
+inherited
+inherited cat
+initialism of
+interfix cat
+IPA
+IPA letters
+iterative of
+jdt-IPA
+jump
+jyutping reading of
+Kana-small
+kword
+l
+l-bold
+l-self
+l-self-bold
+label
+langcat
+langcatboiler
+langname-mention
+Latn-def
+lb
+lbl
+lbor
+learned borrowing
+lenition of
+link
+list helper
+ll
+m
+m+
+m-self
+manual translit diff cat
+masculine noun of
+masculine of
+masculine plural of
+masculine plural past participle of
+medieval spelling of
+men's speech form of
+mention
+meronyms
+meta-diacritical mark
+meta-phrase
+meta-place
+meta-punctuation mark
+misconstruction of
+misromanization of
+misspelling of
+mixed mutation of
+name cat
+named-after
+nasal mutation of
+ncog
+negative of
+neuter plural of
+neuter singular of
+neuter singular past participle of
+no entry
+no entry cat
+no-verb table passive
+nomen sacrum form of
+nominalization of
+nominative plural of
+nominative singular of
+noncog
+noncognate
+nonstandard form of
+nonstandard spelling of
+noun form of
+number box
+number box2
+nuqtaless form of
+obor
+obsolete form of
+obsolete spelling of
+obsolete typography of
+only used in
+onomatopoeic
+ordinalbox
+orthographic borrowing
+participle of
+passive of
+passive participle of
+passive past tense of
+past active participle of
+past participle form of
+past participle of
+past passive participle of
+past tense of
+patronymic
+pejorative of
+perfect participle of
+perfective form of
+perfectives
+pf
+phono-semantic matching
+phrasebook cat
+picdic/label
+picdicimg
+picdiclabel
+PIE root
+pinyin reading of
+place
+plural of
+poscatboiler
+pre
+prefex
+prefix
+prefix cat
+prefixsee
+prefixusex
+present active participle of
+present participle of
+present tense of
+pronunciation spelling of
+pronunciation variant of
+psm
+Q
+quote
+quote-av
+quote-book
+quote-hansard
+quote-journal
+quote-newsgroup
+quote-song
+quote-text
+quote-us-patent
+quote-web
+quote-wikipedia
+rare form of
+rare spelling of
+redundant translit cat
+reflexive of
+rel2
+rel3
+rel4
+rfap
+rfc
+rfc-header
+rfc-level
+rfc-pron-n
+rfc-sense
+rfclarify
+rfd
+rfd-redundant
+rfd-sense
+rfdate
+rfdatek
+rfdef
+rfe
+rfex
+rfform
+rfform
+rfgender
+rfi
+rfinfl
+rfm
+rfp
+rfp-old
+rfquote
+rfquote-sense
+rfquotek
+rfref
+rfscript
+rftranslit
+rfv
+rfv-etym
+rfv-pron
+rfv-quote
+rfv-sense
+rhyme
+rhymes
+rhymes nav
+rhymes row
+romanization of
+rootsee
+seeCites
+seemoreCites
+seeSynonyms
+semantic loan
+semantic loan cat
+semi-learned borrowing
+senseid
+sequence
+short for
+SI-unit
+SI-unit-np
+singular of
+singulative of
+sl
+slbor
+slender form of
+soft mutation of
+spelling of
+standard form of
+standard spelling of
+suf
+sufex
+suffix
+suffix cat
+suffixsee
+suffixusex
+superlative attributive of
+superlative of
+superlative predicative of
+superseded spelling of
+supine of
+surname
+syn
+syn of
+syncopic form of
+synonym of
+synonyms
+t
+t+
+t+check
+t-check
+t-needed
+t-needed
+t-prothesis of
+Table:Chinese Zodiac
+tea room
+tea room sense
+term-label
+tlb
+top
+topic cat
+topics
+trademark erosion
+transfixcat
+translit
+translit cat
+transliteration
+troponyms
+U:false friend
+ubor
+unadapted borrowing
+unadapted borrowing cat
+uncertain
+uncommon form of
+uncommon spelling of
+unk
+unknown
+User lang subcat
+usex
+ux
+uxi
+verb form of
+verbal noun of
+vocative plural of
+vocative singular of
+was fwotd
+X2IPA
+x2IPA
+x2ipa
+x2rhymes
+xlit
+Zodiac
