@@ -2,6 +2,7 @@
 
 if (( $# == 0 )); then
 	echo "At least one argument is required.";
+    exit -1;
 fi
 
 cd "$HOME/enwikt-dump-rs";
@@ -13,7 +14,15 @@ for arg in "$@"; do
 	fi
 done
 
-DATE=20191220
+
+YEAR=$(date +%Y)
+MONTH=$(date +%m)
+if (( $(date +%d) > 20 )); then
+    DAY=20;
+else
+    DAY=01;
+fi
+DATE=$YEAR$MONTH$DAY
 WIKI=enwiktionary
 
 DUMP_DIR="$HOME/www/static/dump/$DATE";
