@@ -1,15 +1,6 @@
 #! /usr/bin/env bash
 
-YEAR=$(date +%Y)
-MONTH=$(date +%m)
-if [ $(date +%d) -ge 20 ]; then
-    DAY=20;
-else
-    DAY=01;
-fi
-DATE=$YEAR$MONTH$DAY
-WIKI=enwiktionary
-DUMP_DIR=/public/dumps/public/
+. common.sh
 
 get_decompressed() {
     if (( $# != 1 )); then
@@ -20,7 +11,7 @@ get_decompressed() {
     LOCAL_NAME=$DATE-$1
     
     if [[ ! -f $LOCAL_NAME ]]; then
-        FILEPATH=$DUMP_DIR/$WIKI/$DATE/$WIKI-$DATE-$1.gz
+        FILEPATH=$DUMP_PREFIX-$1.gz
         if [[ ! -f $FILEPATH ]]; then
             echo $FILEPATH not found.
             return 1
@@ -40,5 +31,5 @@ if ! ( get_decompressed page.sql && get_decompressed redirect.sql ); then
 fi
 
 OUT_DIR=~/template_redirects
-OUT_FILE=$OUT_DIR/$DATE.json
+OUT_FILE=$OUT_DIR/$DUMP_DATE.json
 mkdir -p $OUT_DIR && ~/bin/lua -ltemplate_redirects -lcjson -e 'print(cjson.encode(template_redirects))' > $OUT_FILE

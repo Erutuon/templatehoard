@@ -12,21 +12,11 @@ for arg in "$@"; do
 	fi
 done
 
-
-YEAR=$(date +%Y)
-MONTH=$(date +%m)
-if (( $(date +%d) > 20 )); then
-    DAY=20;
-else
-    DAY=01;
-fi
-DATE=$YEAR$MONTH$DAY
-WIKI=enwiktionary
+. common.sh
 
 DUMP_DIR=$HOME/www/static/dump/$DATE
 TEMPLATE_NAMES=$DUMP_DIR/template_names.txt
-REDIRECT_DATA=~/template_redirects/$DATE.json
-PAGES_ARTICLES=/public/dumps/public/$WIKI/$DATE/$WIKI-$DATE-pages-articles.xml.bz2
+REDIRECT_DATA=~/template_redirects/$DUMP_DATE.json
 
 mkdir -p $DUMP_DIR || { echo Failed to create dump directory; exit -1; }
 

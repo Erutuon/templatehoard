@@ -1,19 +1,7 @@
 #! /usr/bin/env bash
 
-WIKI=enwiktionary
+. common.sh
 
-YEAR=$(date +%Y)
-MONTH=$(date +%m)
-if [ $(date +%d) -ge 20 ]; then
-    DAY=20;
-else
-    DAY=01;
-fi
-DATE=$YEAR$MONTH$DAY
-
-PREFIX=/public/dumps/public/$WIKI/$DATE/$WIKI-$DATE
-PAGES_META_CURRENT=$PREFIX-pages-meta-current.xml.bz2
-PAGES_ARTICLES=$PREFIX-pages-articles.xml.bz2
 SCRIPT=~/git/entry_index.lua
 OUT_DIR=~/entry_index
 ENWIKTIONARY_LUA_DIR=~/share/lua/5.3/enwiktionary
@@ -30,4 +18,4 @@ $PROCESS_WITH_LUA headers \
     -n main -n reconstruction -n appendix \
     -i $PAGES_ARTICLES \
     -s $SCRIPT \
-    > $OUT_DIR/$DATE.txt
+    > $OUT_DIR/$DUMP_DATE.txt
