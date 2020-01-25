@@ -5,8 +5,6 @@ if (( $# == 0 )); then
     exit -1;
 fi
 
-cd "$HOME/enwikt-dump-rs";
-
 for arg in "$@"; do
 	if [[ ! -f "$arg" ]]; then
 		echo "All parameters must be filepaths; $arg is not.";
@@ -25,17 +23,21 @@ fi
 DATE=$YEAR$MONTH$DAY
 WIKI=enwiktionary
 
-DUMP_DIR="$HOME/www/static/dump/$DATE";
+DUMP_DIR=$HOME/www/static/dump/$DATE
+TEMPLATE_NAMES=$DUMP_DIR/template_names.txt
+REDIRECT_DATA=~/template_redirects/$DATE.json
+PAGES_ARTICLES=/public/dumps/public/$WIKI/$DATE/$WIKI-$DATE-pages-articles.xml.bz2
 
-if [[ ! -d "$DUMP_DIR" ]]; then
-    mkdir -p "$DUMP_DIR" || { echo Failed to create dump directory; exit -1; };
-fi
+mkdir -p $DUMP_DIR || { echo Failed to create dump directory; exit -1; }
 
-FILENAME=template_names.txt;
+cd $HOME/enwikt-dump-rs;
 
-cat "$@" | lua/add_template_redirects.lua > $DUMP_DIR/$FILENAME || { echo Failed to add redirects to $FILENAME; exit -1; };
+cat "$@" | ~/bin/lua lua/add_template_redirects.lua "%s.cbor" $REDIRECT_DATA > $TEMPLATE_NAMES || { echo Failed to create template names file, $TEMPLATE_NAMES; exit -1; }
 
-cd "$DUMP_DIR";
+cd $DUMP_DIR;
 
-"$HOME/bin/wiktionary-data" dump-parsed-templates --input "/public/dumps/public/$WIKI/$DATE/$WIKI-$DATE-pages-articles.xml.bz2" --templates "$FILENAME" \
-    --namespaces main,reconstruction,appendix --format cbor;
+$HOME/bin/wiktionary-data dump-parsed-templates \
+	--input $PAGES_ARTICLES \
+	--templates $TEMPLATE_NAMES \
+    --namespaces main,reconstruction,appendix \
+	--format cbor;

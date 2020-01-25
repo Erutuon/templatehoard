@@ -71,7 +71,6 @@ cln
 cog
 coglist
 cognate
-coinage cat
 col
 col-u
 col1
@@ -116,6 +115,8 @@ desc
 descendant
 descendants tree
 desctree
+deverbal
+deverbative
 diminutive of
 diminutive plural of
 doc:letter:examples:add
@@ -323,6 +324,7 @@ quote-web
 quote-wikipedia
 rare form of
 rare spelling of
+rebracketing
 redundant translit cat
 reflexive of
 rel2
@@ -412,6 +414,7 @@ t-check
 t-needed
 t-needed
 t-prothesis of
+t-simple
 Table:Chinese Zodiac
 tea room
 tea room sense
@@ -421,7 +424,7 @@ top
 topic cat
 topics
 trademark erosion
-transfixcat
+transfix cat
 translit
 translit cat
 transliteration

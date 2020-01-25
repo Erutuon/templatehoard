@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
 
 cd enwikt-dump-rs
-$HOME/.cargo/bin/cargo build --release
+RUSTFLAGS='--emit=asm -C target-cpu=native' $HOME/.cargo/bin/cargo build --release
 
