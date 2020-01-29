@@ -1,0 +1,3 @@
+[submodule "templatehoard-server"]
+	path = templatehoard-server
+	url = https://github.com/Erutuon/templatehoard-server
