@@ -7,8 +7,8 @@ if [ $(date +%d) -ge 20 ]; then
 else
     DAY=01;
 fi
-DUMP_DATE=$YEAR$MONTH$DAY
+export DUMP_DATE=$YEAR$MONTH$DAY
 
-DUMP_PREFIX=/public/dumps/public/$WIKI/$DATE/$WIKI-$DATE
-PAGES_META_CURRENT=$DUMP_PREFIX-pages-meta-current.xml.bz2
-PAGES_ARTICLES=$DUMP_PREFIX-pages-articles.xml.bz2
+export DUMP_PREFIX=/public/dumps/public/$WIKI/$DUMP_DATE/$WIKI-$DUMP_DATE
+export PAGES_META_CURRENT=$DUMP_PREFIX-pages-meta-current.xml.bz2
+export PAGES_ARTICLES=$DUMP_PREFIX-pages-articles.xml.bz2

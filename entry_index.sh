@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-. common.sh
+. ~/git/common.sh
 
 SCRIPT=~/git/entry_index.lua
 OUT_DIR=~/entry_index

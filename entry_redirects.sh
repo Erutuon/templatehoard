@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-. common.sh
+. ~/git/common.sh
 
 OUT_DIR=~/entry_redirects
 

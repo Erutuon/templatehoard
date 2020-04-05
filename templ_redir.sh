@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-. common.sh
+. ~/git/common.sh
 
 get_decompressed() {
     if (( $# != 1 )); then
@@ -8,7 +8,7 @@ get_decompressed() {
         return 1
     fi
     
-    LOCAL_NAME=$DATE-$1
+    LOCAL_NAME=$DUMP_DATE-$1
     
     if [[ ! -f $LOCAL_NAME ]]; then
         FILEPATH=$DUMP_PREFIX-$1.gz

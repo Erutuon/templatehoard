@@ -12,9 +12,9 @@ for arg in "$@"; do
 	fi
 done
 
-. common.sh
+. ~/git/common.sh
 
-DUMP_DIR=$HOME/www/static/dump/$DATE
+DUMP_DIR=$HOME/www/static/dump/$DUMP_DATE
 TEMPLATE_NAMES=$DUMP_DIR/template_names.txt
 REDIRECT_DATA=~/template_redirects/$DUMP_DATE.json
 
