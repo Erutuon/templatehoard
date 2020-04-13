@@ -4,4 +4,5 @@
 
 OUT_DIR=~/entry_redirects
 
-cd ~/enwikt-dump-rs && mkdir -p $OUT_DIR && lua lua/redirects_in_namespaces.lua "" reconstruction appendix > $OUT_DIR/$DUMP_DATE.txt
+# main, appendix, reconstruction
+cd ~/parse-mediawiki-sql && mkdir -p $OUT_DIR && cargo run --release --example redirects_by_namespace 0 100 118 > $OUT_DIR/$DUMP_DATE.txt

@@ -23,7 +23,7 @@ get_decompressed() {
     return 0
 }
 
-cd ~/enwikt-dump-rs
+cd ~/parse-mediawiki-sql
 
 if ! ( get_decompressed page.sql && get_decompressed redirect.sql ); then
     echo Failed to get decompressed files.
@@ -32,4 +32,5 @@ fi
 
 OUT_DIR=~/template_redirects
 OUT_FILE=$OUT_DIR/$DUMP_DATE.json
-mkdir -p $OUT_DIR && ~/bin/lua -ltemplate_redirects -lcjson -e 'print(cjson.encode(template_redirects))' > $OUT_FILE
+
+mkdir -p $OUT_DIR && cargo run --release --example template_redirects > $OUT_FILE
