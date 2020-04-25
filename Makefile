@@ -3,7 +3,7 @@ WIKI = enwiktionary
 YEAR = $(shell date +%Y)
 MONTH = $(shell date +%m)
 
-ifeq ($(shell [ $(shell date +%d) -ge 20 ]), 1)
+ifeq ($(shell test $(shell date +%d) -ge 20 && echo true),true)
 	DAY = 20
 else
 	DAY = 01
@@ -19,6 +19,9 @@ PROCESS_WITH_LUA = $(HOME)/enwikt-dump-rs/target/release/process-with-lua
 
 SQL_DIR = $(HOME)/parse-mediawiki-sql
 SQL_PREFIX = $(SQL_DIR)/$(DUMP_DATE)
+PAGE_SQL     = $(SQL_PREFIX)-page.sql
+REDIRECT_SQL = $(SQL_PREFIX)-redirect.sql
+
 TEMPLATE_REDIRECTS_DIR = $(HOME)/template_redirects
 TEMPLATE_REDIRECTS_JSON = $(TEMPLATE_REDIRECTS_DIR)/$(DUMP_DATE).json
 
@@ -40,24 +43,27 @@ AUGMENTED_ENTRY_INDEX = $(AUGMENTED_ENTRY_INDEX_DIR)/$(DUMP_DATE).txt
 
 template_redirects: $(TEMPLATE_REDIRECTS_JSON)
 
-$(TEMPLATE_REDIRECTS_JSON): $(SQL_PREFIX)-page.sql $(SQL_PREFIX)-redirect.sql
-	cd $(SQL_DIR)
+$(TEMPLATE_REDIRECTS_JSON): $(PAGE_SQL) $(REDIRECT_SQL)
 	mkdir -p $(TEMPLATE_REDIRECTS_DIR)
-	cargo run --release --example template_redirects \
+	cd $(SQL_DIR) && \
+		cargo run --release --example template_redirects \
+		$(PAGE_SQL) $(REDIRECT_SQL) \
 		> $(TEMPLATE_REDIRECTS_JSON)
 
-$(SQL_DIR)/$(DUMP_DATE)-%.sql:
+$(SQL_PREFIX)-%.sql:
 	cd $(SQL_DIR) && \
 		gunzip -c $(DUMP_PREFIX)-$*.sql.gz > $@
 
 templates: $(TEMPLATE_REDIRECTS_JSON)
-	cd $(HOME) && ./gather_template_names.py > $(TEMPLATE_NAMES)
-	cd $(HOME)/enwikt-dump-rs
-	cat $(TEMPLATE_NAMES) | \
+	cd $(HOME) && $(HOME)/git/gather_template_names.py > $(TEMPLATE_NAMES)
+	echo $(shell)
+	mkdir -p $(TEMPLATE_DUMP_DIR)
+	cd $(HOME)/enwikt-dump-rs && \
+		cat $(TEMPLATE_NAMES) | \
 		$(LUA) lua/add_template_redirects.lua "%s.cbor" $(TEMPLATE_REDIRECTS_JSON) \
 		> $(TEMPLATE_NAMES_WITH_REDIRECTS)
-	mkdir -p $(TEMPLATE_DUMP_DIR) && cd $(TEMPLATE_DUMP_DIR)
-	$(HOME)/bin/wiktionary-data dump-parsed-templates \
+	cd $(TEMPLATE_DUMP_DIR) && \
+		$(HOME)/bin/wiktionary-data dump-parsed-templates \
 		--input $(PAGES_ARTICLES) \
 		--templates $(TEMPLATE_NAMES_WITH_REDIRECTS) \
 		--namespaces main,reconstruction,appendix \
@@ -83,10 +89,10 @@ $(ENTRY_INDEX): $(ENWIKTIONARY_LUA_DIR)/language_name_to_code.lua
 entry_redirects: $(ENTRY_REDIRECTS)
 
 $(ENTRY_REDIRECTS):
-	cd $(SQL_DIR)
 	mkdir -p $(ENTRY_REDIRECTS_DIR)
 	# main, appendix, reconstruction
-	cargo run --release --example redirects_by_namespace 0 100 118 > $(ENTRY_REDIRECTS)
+	cd $(SQL_DIR) && \
+		cargo run --release --example redirects_by_namespace 0 100 118 > $(ENTRY_REDIRECTS)
 
 augmented_entry_index: $(AUGMENTED_ENTRY_INDEX)
 
