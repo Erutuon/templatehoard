@@ -9,6 +9,8 @@ else
 	DAY = 01
 endif
 
+START_TIME = $(shell date +%Y%m%d%H%M)
+
 DUMP_DATE ?= $(YEAR)$(MONTH)$(DAY)
 DUMP_PREFIX = /public/dumps/public/$(WIKI)/$(DUMP_DATE)/$(WIKI)-$(DUMP_DATE)
 PAGES_META_CURRENT = $(DUMP_PREFIX)-pages-meta-current.xml.bz2
@@ -56,18 +58,20 @@ $(SQL_PREFIX)-%.sql:
 
 templates: $(TEMPLATE_REDIRECTS_JSON)
 	cd $(HOME) && $(HOME)/git/gather_template_names.py > $(TEMPLATE_NAMES)
-	echo $(shell)
-	mkdir -p $(TEMPLATE_DUMP_DIR)
 	cd $(HOME)/enwikt-dump-rs && \
 		cat $(TEMPLATE_NAMES) | \
 		$(LUA) lua/add_template_redirects.lua "%s.cbor" $(TEMPLATE_REDIRECTS_JSON) \
 		> $(TEMPLATE_NAMES_WITH_REDIRECTS)
-	cd $(TEMPLATE_DUMP_DIR) && \
+	mkdir -p $(HOME)/tmp/template_dumps/$(START_TIME) && \
+		cd $(HOME)/tmp/template_dumps/$(START_TIME) && \
 		$(HOME)/bin/wiktionary-data dump-parsed-templates \
 		--input $(PAGES_ARTICLES) \
 		--templates $(TEMPLATE_NAMES_WITH_REDIRECTS) \
 		--namespaces main,reconstruction,appendix \
 		--format cbor
+	mv -fT $(TEMPLATE_DUMP_DIR) ../$$(date +%Y%m%d%H%M) && mkdir -p $(TEMPLATE_DUMP_DIR) \
+		&& mv -fT $(START_TIME) $(TEMPLATE-DUMP_DIR)
+	
 
 $(ENWIKTIONARY_LUA_DIR)/language_name_to_code.lua:
 	$(PROCESS_WITH_LUA) text \
