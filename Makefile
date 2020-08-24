@@ -1,3 +1,5 @@
+SHELL = bash
+
 WIKI = enwiktionary
 
 YEAR = $(shell date +%Y)
@@ -9,12 +11,17 @@ else
 	DAY = 01
 endif
 
-START_TIME = $(shell date +%Y%m%d%H%M)
+START_TIME = $(shell date +%Y%m%d%H%M%S)
+TEMPLATE_DUMP_TEMP_DIR = $(HOME)/tmp/template_dumps
+TEMPLATE_DUMP_TEMP = $(TEMPLATE_DUMP_TEMP_DIR)/$(START_TIME)
+TEMPLATE_NAMES_WITH_REDIRECTS = $(TEMPLATE_DUMP_TEMP)/template_names.txt
+
 
 DUMP_DATE ?= $(YEAR)$(MONTH)$(DAY)
 DUMP_PREFIX = /public/dumps/public/$(WIKI)/$(DUMP_DATE)/$(WIKI)-$(DUMP_DATE)
 PAGES_META_CURRENT = $(DUMP_PREFIX)-pages-meta-current.xml.bz2
 PAGES_ARTICLES = $(DUMP_PREFIX)-pages-articles.xml.bz2
+SITEINFO_NAMESPACES = $(DUMP_PREFIX)-siteinfo-namespaces.json.gz
 
 LUA = $(HOME)/bin/lua
 PROCESS_WITH_LUA = $(HOME)/enwikt-dump-rs/target/release/process-with-lua
@@ -29,7 +36,6 @@ TEMPLATE_REDIRECTS_JSON = $(TEMPLATE_REDIRECTS_DIR)/$(DUMP_DATE).json
 
 TEMPLATE_DUMP_DIR = $(HOME)/www/static/dump/$(DUMP_DATE)
 TEMPLATE_NAMES = $(HOME)/git/template_names/all.txt
-TEMPLATE_NAMES_WITH_REDIRECTS = $(TEMPLATE_DUMP_DIR)/template_names.txt
 
 ENTRY_INDEX_SCRIPT = $(HOME)/git/entry_index.lua
 ENTRY_INDEX_DIR = $(HOME)/entry_index
@@ -58,19 +64,20 @@ $(SQL_PREFIX)-%.sql:
 
 templates: $(TEMPLATE_REDIRECTS_JSON)
 	cd $(HOME) && $(HOME)/git/gather_template_names.py > $(TEMPLATE_NAMES)
+	mkdir -p $(TEMPLATE_DUMP_TEMP)
 	cd $(HOME)/enwikt-dump-rs && \
 		cat $(TEMPLATE_NAMES) | \
 		$(LUA) lua/add_template_redirects.lua "%s.cbor" $(TEMPLATE_REDIRECTS_JSON) \
 		> $(TEMPLATE_NAMES_WITH_REDIRECTS)
-	mkdir -p $(HOME)/tmp/template_dumps/$(START_TIME) && \
-		cd $(HOME)/tmp/template_dumps/$(START_TIME) && \
+	cd $(TEMPLATE_DUMP_TEMP) && \
 		$(HOME)/bin/wiktionary-data dump-parsed-templates \
 		--input $(PAGES_ARTICLES) \
 		--templates $(TEMPLATE_NAMES_WITH_REDIRECTS) \
 		--namespaces main,reconstruction,appendix \
 		--format cbor
-	mv -fT $(TEMPLATE_DUMP_DIR) ../$$(date +%Y%m%d%H%M) && mkdir -p $(TEMPLATE_DUMP_DIR) \
-		&& mv -fT $(START_TIME) $(TEMPLATE-DUMP_DIR)
+	if [[ -a $(TEMPLATE_DUMP_DIR)  ]]; then mv -fT $(TEMPLATE_DUMP_DIR) $(TEMPLATE_DUMP_TEMP_DIR)/$$(date +%Y%m%d%H%M%S); fi
+	mkdir -p $(TEMPLATE_DUMP_DIR)
+	mv -fT $(TEMPLATE_DUMP_TEMP) $(TEMPLATE_DUMP_DIR)
 	
 
 $(ENWIKTIONARY_LUA_DIR)/language_name_to_code.lua:
@@ -92,11 +99,12 @@ $(ENTRY_INDEX): $(ENWIKTIONARY_LUA_DIR)/language_name_to_code.lua
 
 entry_redirects: $(ENTRY_REDIRECTS)
 
-$(ENTRY_REDIRECTS):
+$(ENTRY_REDIRECTS): $(PAGE_SQL) $(REDIRECT_SQL)
 	mkdir -p $(ENTRY_REDIRECTS_DIR)
 	# main, appendix, reconstruction
 	cd $(SQL_DIR) && \
-		cargo run --release --example redirects_by_namespace 0 100 118 > $(ENTRY_REDIRECTS)
+		cargo run --release --example redirects_by_namespace -- \
+		-s $(SITEINFO_NAMESPACES) -p $(PAGE_SQL) -r $(REDIRECT_SQL) 0 100 118 > $(ENTRY_REDIRECTS)
 
 augmented_entry_index: $(AUGMENTED_ENTRY_INDEX)
 
