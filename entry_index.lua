@@ -1,9 +1,10 @@
 local count = 0
-local first_arg = ...
-local limit = first_arg and (tonumber(first_arg) or error(first_arg .. " is not an integer"))
+local language_names_path, limit_arg = ...
+assert(type(language_names_path) == "string", "supply path to language names Lua module in first argument")
+local limit = limit_arg and (tonumber(limit_arg) or error(limit_arg .. " is not an integer"))
 	or math.maxinteger
 
-local language_name_to_code = require "enwiktionary.language_name_to_code"
+local language_name_to_code = dofile(language_names_path)
 
 local language_printer_mt = {
 	__index = table,

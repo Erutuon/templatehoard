@@ -16,7 +16,7 @@ local function get_entry_redirects(path)
 		local from, to = line:match "^([^\t]+)\t([^\t]+)$"
 		i = i + 1
 		if not from then
-			eprint("Line #", i, " ,", line, ", didn't match pattern")
+			eprint("Line #" .. i .. " ," .. line .. ", didn't match pattern")
 		else
 			from, to = normalize_title(from), normalize_title(to)
 			local redirects = title_to_redirects[to]
@@ -36,7 +36,7 @@ local function process_entry_index(path, title_to_redirects)
 		local title, languages = line:match "^([^\t]+)\t(.+)$"
 		i = i + 1
 		if not title then
-			eprint("Line #", i, " ,", line, ", didn't match pattern'")
+			eprint("Line #" .. i .. " ," .. line .. ", didn't match pattern")
 		else
 			title = normalize_title(title)
 			local redirects = title_to_redirects[title]
@@ -49,10 +49,6 @@ local function process_entry_index(path, title_to_redirects)
 		end
 	end
 end
-
--- local HOME = os.getenv "HOME"
--- local entry_redirects = HOME .. "/enwikt-dump-rs/entry_redirects.txt"
--- local entry_index = HOME .. "/entry_index/20200101.txt"
 
 local entry_index, entry_redirects = ...
 process_entry_index(entry_index, get_entry_redirects(entry_redirects))
