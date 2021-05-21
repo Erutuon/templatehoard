@@ -1,0 +1,3 @@
+backend: kubernetes
+type: golang111
+extra_args: ["bin/server", "--port", "8000", "--cbor", "www/static/dump/latest", "--static", "git/templatehoard-server/static", "--redirects", "work/template_redirects/latest.json"]
