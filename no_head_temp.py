@@ -26,31 +26,36 @@ queries = [
     "set @mw_rollback = (select ctd_id from change_tag_def where ctd_name = 'mw-rollback')",
 """
 select
-    replace(page_title, '_', ' ') as title,
-    actor_name as editor,
-    date_format(rev_timestamp, '%Y-%m-%d %T') as datetime,
-    rev_id as revision,
-    if(rev_id = page_latest, 'latest', '') as latest
-from revision
-join change_tag on ct_rev_id = rev_id
-join actor      on actor_id  = rev_actor
-join page       on page_id   = rev_page
-where ct_tag_id = @no_head_temp
-and page_namespace = 0
-and rev_timestamp >= '2018'
+    replace(page_title, '_', ' ')                                                    as title,
+    actor_name                                                                       as editor,
+    date_format(first_no_head_temp.rev_timestamp, '%Y-%m-%d %T')                     as datetime,
+    first_no_head_temp.rev_id                                                        as revision,
+    if(first_no_head_temp.rev_id = first_no_head_temp_page.page_latest, 'yes', 'no') as latest,
+    -- parent_revision.rev_id                                                           as parent_revision,
+    date_format(parent_revision.rev_timestamp, '%Y-%m-%d %T')                        as parent_datetime
+from revision first_no_head_temp
+join      change_tag first_no_head_temp_tag  on first_no_head_temp_tag.ct_rev_id = first_no_head_temp.rev_id
+join      actor                              on actor_id                         = first_no_head_temp.rev_actor
+join      page       first_no_head_temp_page on page_id                          = first_no_head_temp.rev_page
+
+left join revision   parent_revision         on parent_revision.rev_id           = first_no_head_temp.rev_parent_id
+
+where first_no_head_temp_tag.ct_tag_id       = @no_head_temp
+and   first_no_head_temp_page.page_namespace = 0
+-- and   first_no_head_temp.rev_timestamp       >= '2017'
 -- previous revision doesn't have "no head temp" tag or the "mw-rollback" tag
 and not exists(
-    select 1 from change_tag parent_revision
-    where parent_revision.ct_rev_id = rev_parent_id
-    and parent_revision.ct_tag_id in (@no_head_temp, @mw_rollback)
+    select 1 from change_tag parent_revision_tag
+    where parent_revision_tag.ct_rev_id =  first_no_head_temp.rev_parent_id
+    and   parent_revision_tag.ct_tag_id in (@no_head_temp, @mw_rollback)
 )
 -- current revision has "no head temp" tag
 and exists(
     select 1 from change_tag current_revision
-    where current_revision.ct_rev_id = page_latest
-    and current_revision.ct_tag_id = @no_head_temp
+    where current_revision.ct_rev_id = first_no_head_temp_page.page_latest
+    and   current_revision.ct_tag_id = @no_head_temp
 )
-order by page_title asc, `datetime` desc
+order by page_title asc, `datetime` desc;
 """
 ]
 
@@ -66,6 +71,7 @@ try:
         # rows = cur.fetchmany(20)
         print("query yielded {} rows".format(len(rows)))
         titles = [row["title"].decode() for row in rows]
+        
         pages = {
             page.title(): page
             for page in PreloadingGenerator(
@@ -73,15 +79,23 @@ try:
                 groupsize = 5000
             )
         }
+        
         for row in rows:
             title = row["title"].decode()
+            
+            parent_datetime = row["parent_datetime"]
+            # the parent revision was submitted after the abuse filter that adds the `no head temp` tag was created
+            # as revisions before that time will not have the tag unless someone added it manually,
+            show_revision = parent_datetime is None or parent_datetime > "2017-05-22 15:53"
+            
             tsv_row = "{title}\t{editor}\t{datetime}\t{revision}\t{latest}".format(
-                revision = row["revision"],
+                revision = row["revision"] if show_revision else "",
                 title = title,
-                datetime = row["datetime"],
-                editor = row["editor"].decode(),
-                latest = row["latest"]
+                datetime = row["datetime"] if show_revision else "",
+                editor = row["editor"].decode() if show_revision else "",
+                latest = row["latest"] if show_revision else ""
             )
+            
             row_page = pages.get(title)
             if row_page is not None:
                 for language, text in iter_missing_head_temps(row_page.text):
@@ -89,7 +103,9 @@ try:
                     tsv_row += "\t{language}\t<nowiki>{text}</nowiki>".format(
                         language = language, text = text
                     )
+            
             printed.append(tsv_row)
+        
         edit_list = "\n".join(printed)
         
         def insert_in_delimiters(s, name, text, with_newlines = False):
