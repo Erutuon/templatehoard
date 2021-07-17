@@ -80,8 +80,16 @@ try:
             )
         }
         
+        # The query returns multiple rows for some pages.
+        # This dict allows displaying only the first one (that is, the one with the latest revision).
+        already_seen = dict()
+        
         for row in rows:
             title = row["title"].decode()
+            if title not in already_seen:
+                already_seen[title] = True
+            else:
+                continue
             
             parent_datetime = row["parent_datetime"]
             # the parent revision was submitted after the abuse filter that adds the `no head temp` tag was created
