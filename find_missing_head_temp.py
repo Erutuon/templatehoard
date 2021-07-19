@@ -8,7 +8,7 @@ with open("pos_list.txt", mode = "r") as f:
 
 pos_re = "|".join(pos.replace(" ", r"\s*").lower() + r"(?:\s*\d+)?" for pos in pos_list)
 no_head_re = r"""(?isx)
-    (===+) \s* (?P<header> {pos_re} ) \s* \1
+    (=+) \s* (?P<header> {pos_re} ) \s* \1
     \n+ (?!{{)
     (?P<content>
         # line that is not a headword-line template or a definition
@@ -26,7 +26,7 @@ def escape_tsv(s: str):
 
 def iter_missing_head_temps(text: str):
     for match in re.finditer(
-        r"(?s)==\s*(?P<language>[^=\n]+)\s*==\n+(?P<entry>.+?)(?=$|\n+==[^=])", text
+        r"(?is)==\s*(?!{pos_re})(?P<language>[^\s=][^=\n]*)\s*==\n+(?P<entry>.+?)(?=\n+==\s*(?!{pos_re})[^\s=]|$)".format(pos_re = pos_re), text
     ):
         language, entry = match.group("language"), match.group("entry")
         for match in re.finditer(
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     def print_missing_head_temps(text: str):
         for language, missing_head_temp in iter_missing_head_temps(text):
             print(
-                "language = " + language + "\nmissing_head_temp = " + escape_tsv(missing_head_temp)
+                "language: " + language + "\nmissing_head_temp:\n" + escape_tsv(missing_head_temp)
             )
 
     enwiktionary = Site(code="en", fam="wiktionary")
@@ -61,3 +61,10 @@ if __name__ == "__main__":
 #yes
 """
     )
+    
+    print_missing_head_temps("""
+==English==
+
+== Verb ==
+
+# very very bad""")
