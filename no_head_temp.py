@@ -143,7 +143,7 @@ try:
                     with_newlines = True
                 ),
                 "date",
-                "{:%Y-%m-%d %H:%M}".format(query_start)
+                "{:%Y-%m-%d %H:%M:%S}".format(query_start)
             )
         )
         
